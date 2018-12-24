@@ -1,0 +1,150 @@
+balle B1 = new balle(300,50,10);
+raquette1 R1 = new raquette1 (25,300,1,100);
+raquette2 R2 = new raquette2 (575,300,1,100);
+
+void setup()
+{
+  size(600,600);
+  background(255);
+}
+
+void draw()
+{
+  background(255);
+  B1.render();
+  B1.update();
+  R1.render();
+  R2.render();
+  B1.checkcolisionmur();
+  B1.checkcolisionraquette1(R1);
+  B1.checkcolisionraquette2(R2);
+  B1.loose();
+}
+
+class balle {
+  
+int x;
+int y;
+int r;
+int vitX=(floor(random(-1,4)));
+int vitY=(floor(random(-1,4)));
+
+balle(int x_,int y_, int r_){
+  x= x_;
+  y = y_;
+  r = r_;
+}
+
+void render()
+{
+  ellipse(x,y,r,r);
+}
+
+void update()
+{
+  x+=vitX;
+  y+=vitY;
+}
+
+void checkcolisionmur()
+{
+  if((y-r/2)<0 || (y+r/2)>height)
+  {
+    vitY*=-1;
+  }
+}
+void checkcolisionraquette1(raquette1 R1)
+{
+  if(y-r>R1.y && y+r<R1.y+R1.l)
+  {
+    if(x-r/2 < R1.x - (R1.e/2))
+    {
+      x=R1.x+R1.e+r;
+      vitX*=-1;
+    }
+  }
+}
+void checkcolisionraquette2( raquette2 R2)
+{
+  if(y-r>R2.y && y+r<R2.y+R2.l)
+  {
+    if(x+r/2 > R2.x - (R2.e/2))
+    {
+      x=R2.x- R2.e -r;
+      vitX*=-1;
+}
+  }
+}
+void loose()
+{
+  if((x-r/2)<0 || (x+r/2)>width)
+  {
+    noLoop();
+}
+}
+}
+class raquette1 {
+  int x;
+  int y;
+  int e; //épaisseur//
+  int l; //longeur//
+  
+  raquette1(int x_, int y_, int e_, int l_){
+    x = x_;
+    y = y_;
+    e = e_;
+    l = l_;
+  }
+  
+  void render()
+  {
+    if(keyPressed == true)
+    {
+      if(key == CODED)
+      {
+        if(keyCode == SHIFT && y>0)
+        {
+          y-=4;
+        }
+        if(keyCode == CONTROL && y+l<height)
+        {
+          y+=4;
+        }
+      }
+    }
+    rect(x,y,e,l);
+  }
+}
+
+class raquette2 {
+  int x;
+  int y;
+  int e;
+  int l;
+  
+  raquette2(int x_ ,int y_ , int e_ ,int l_ ){
+    x = x_;
+    y = y_;
+    e = e_;
+    l = l_;
+  }
+  
+  void render()
+  {
+    if(keyPressed == true)
+    {
+      if(key == CODED)
+      {
+        if(keyCode == UP && y>0)
+        {
+          y-=4;
+        }
+        if(keyCode == DOWN && y+l<height)
+        {
+          y+=4;
+        }
+      }
+    }
+    rect(x,y,e,l);
+  }
+}
